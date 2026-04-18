@@ -3,62 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DecisionBug - Galaxy-Themed Decision Tree</title>
+    <title>Decision Tree App</title>
     <style>
         body {
-            background: linear-gradient(to bottom, #4a0f78, #1e1f78);
+            background: linear-gradient(to right, #6a11cb, #2575fc);
             color: white;
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            padding: 20px;
+            font-family: Arial, sans-serif;
         }
-        h1 {
-            font-size: 36px;
+        .step-counter {
+            font-weight: bold;
+            margin-bottom: 10px;
         }
-        .scenario-button {
-            margin: 10px;
-            padding: 15px 25px;
-            background-color: #3e1b85;
-            border: none;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-        }
-        .scenario-button:hover {
-            background-color: #5e4ecb;
-        }
-        .message {
+        .result-message {
             margin-top: 20px;
-            font-size: 24px;
+            padding: 10px;
+            border: 1px solid white;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to DecisionBug!</h1>
-    <div>
-        <h2>What do you think you should do?</h2>
-        <button class="scenario-button" onclick="showStep('computerTime')">Computer Time</button>
-        <button class="scenario-button" onclick="showStep('foodSnacks')">Food/Snacks</button>
-        <button class="scenario-button" onclick="showStep('goingOut')">Going Out/Swimming</button>
-        <button class="scenario-button" onclick="showStep('contactMom')">Contacting Mom</button>
-        <button class="scenario-button" onclick="showStep('cleaningMesses')">Cleaning Messes</button>
-        <button class="scenario-button" onclick="showStep('textingRules')">Texting Rules</button>
-        <button class="scenario-button" onclick="showStep('customScenario')">Custom Scenarios</button>
+    <h1>Decision Tree Application</h1>
+    <div id="decision-tree">
+        <div class="step-counter" id="stepCounter">Step: 1</div>
+        <div id="question"></div>
+        <div id="options"></div>
     </div>
-    <div id="guidance" class="message"></div>
+    <div class="result-message" id="result"></div>
+
     <script>
-        function showStep(scenario) {
-            let messages = {
-                computerTime: "Great choice! Start by checking your meds and doing your chores. Ready for the next step?",
-                foodSnacks: "Awesome! Let’s choose a healthy snack first. What do you want to eat?",
-                goingOut: "Super fun! Make sure you have your swimsuit and sunscreen. Are you ready to go?",
-                contactMom: "Is it an emergency or can it wait? Let's think carefully about this!",
-                cleaningMesses: "Let’s clean up! It’s easy; just start with one small area at a time and ask for help if you need it.",
-                textingRules: "Let’s be safe! Remember to think before you text. What would be the best message to send?",
-                customScenario: "What do you want to do? Let’s create your own decision scenario together!",
-            };
-            document.getElementById('guidance').innerText = messages[scenario];
+        let currentStep = 0;
+        const questions = {
+            computerTime: [
+                "Do you have any assignments to finish?",
+                "Are you feeling motivated?",
+                "Would you like to reward yourself afterward?"
+            ],
+            foodSnacks: [
+                "Are you hungry?",
+                "Do you want something healthy?",
+                "Would you prefer a snack or a meal?"
+            ],
+            goingOut: [
+                "Is the weather nice outside?",
+                "Do you have plans for the evening?",
+                "Is there a place you want to visit?"
+            ],
+            contactMom: [
+                "Do you need help?",
+                "Is there something you want to share?",
+                "Would you like to ask for advice?"
+            ],
+            cleaningMesses: [
+                "Is your room messy?",
+                "Do you have time to clean?",
+                "Would you like to listen to music while cleaning?"
+            ],
+            textingRules: [
+                "Are you allowed to use your phone?",
+                "Do you want to wait for a response?",
+                "Is it urgent to contact someone?"
+            ]
+        };
+
+        function showNextQuestion() {
+            let scenario = Object.keys(questions)[currentStep % Object.keys(questions).length];
+            let question = questions[scenario][(currentStep / Object.keys(questions).length) % questions[scenario].length];
+            document.getElementById('question').innerText = question;
+            // You can add options for YES/NO or other choices here
+            currentStep++;
+            document.getElementById('stepCounter').innerText = 'Step: ' + (currentStep + 1);
         }
+
+        showNextQuestion();
     </script>
 </body>
 </html>
