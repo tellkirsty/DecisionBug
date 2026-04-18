@@ -3,80 +3,384 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decision Tree App</title>
+    <title>DecisionBug - Step-by-Step Decision Tree</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
+            background: linear-gradient(to bottom, #4a0f78, #1e1f78);
             color: white;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 32px;
+            color: #a855f7;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+        .question {
+            background: rgba(139, 92, 246, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            border-left: 4px solid #a855f7;
         }
         .step-counter {
-            font-weight: bold;
+            font-size: 12px;
+            color: #b794f6;
             margin-bottom: 10px;
         }
-        .result-message {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid white;
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            padding: 15px;
+            background-color: #3e1b85;
+            border: 2px solid #a855f7;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
             border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #5e4ecb;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
+        }
+        .back-button {
+            background-color: #1e3a8a;
+            border-color: #3b82f6;
+            margin-top: 15px;
+            width: 100%;
+        }
+        .back-button:hover {
+            background-color: #1e40af;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+        }
+        .result {
+            background: rgba(34, 197, 94, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #22c55e;
+            margin-top: 20px;
+        }
+        .result.warning {
+            background: rgba(239, 68, 68, 0.2);
+            border-left-color: #ef4444;
+        }
+        .stars {
+            text-align: center;
+            font-size: 24px;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-    <h1>Decision Tree Application</h1>
-    <div id="decision-tree">
-        <div class="step-counter" id="stepCounter">Step: 1</div>
-        <div id="question"></div>
-        <div id="options"></div>
+    <div class="container">
+        <h1>🌌 DecisionBug 🌌</h1>
+        <div id="content"></div>
     </div>
-    <div class="result-message" id="result"></div>
 
     <script>
-        let currentStep = 0;
-        const questions = {
-            computerTime: [
-                "Do you have any assignments to finish?",
-                "Are you feeling motivated?",
-                "Would you like to reward yourself afterward?"
-            ],
-            foodSnacks: [
-                "Are you hungry?",
-                "Do you want something healthy?",
-                "Would you prefer a snack or a meal?"
-            ],
-            goingOut: [
-                "Is the weather nice outside?",
-                "Do you have plans for the evening?",
-                "Is there a place you want to visit?"
-            ],
-            contactMom: [
-                "Do you need help?",
-                "Is there something you want to share?",
-                "Would you like to ask for advice?"
-            ],
-            cleaningMesses: [
-                "Is your room messy?",
-                "Do you have time to clean?",
-                "Would you like to listen to music while cleaning?"
-            ],
-            textingRules: [
-                "Are you allowed to use your phone?",
-                "Do you want to wait for a response?",
-                "Is it urgent to contact someone?"
-            ]
+        const decisionTrees = {
+            home: {
+                question: "What do you need help deciding?",
+                options: [
+                    { text: "🖥️ Computer Time", next: "computerTime_1" },
+                    { text: "🍕 Food/Snacks", next: "foodSnacks_1" },
+                    { text: "🏊 Going Out/Swimming", next: "goingOut_1" },
+                    { text: "📞 Contacting Mom", next: "contactMom_1" },
+                    { text: "🧹 Cleaning Messes", next: "cleaningMesses_1" },
+                    { text: "📱 Texting Rules", next: "textingRules_1" }
+                ]
+            },
+
+            computerTime_1: {
+                question: "Is it a school day or a weekend?",
+                step: "Step 1 of 4",
+                options: [
+                    { text: "School Day", next: "computerTime_2" },
+                    { text: "Weekend", next: "computerTime_weekend" }
+                ]
+            },
+            computerTime_weekend: {
+                question: "Have you taken your medication?",
+                step: "Step 2 of 4",
+                options: [
+                    { text: "Yes ✓", next: "computerTime_3" },
+                    { text: "No, not yet", next: "computerTime_meds_no" }
+                ]
+            },
+            computerTime_meds_no: {
+                result: "⏸️ WAIT! Take your meds first. Then come back and ask again. You'll feel better and focus better! 💊",
+                type: "warning"
+            },
+            computerTime_2: {
+                question: "Have you finished ALL your homework?",
+                step: "Step 2 of 4",
+                options: [
+                    { text: "Yes, all done! ✓", next: "computerTime_3" },
+                    { text: "Not yet", next: "computerTime_homework_no" }
+                ]
+            },
+            computerTime_homework_no: {
+                result: "📚 DO YOUR HOMEWORK FIRST! Homework comes before computer time. You've got this! Once it's done, you can enjoy computer time guilt-free! 🎉",
+                type: "warning"
+            },
+            computerTime_3: {
+                question: "Have you done your chores? (dishes from room, garbage, tidying)",
+                step: "Step 3 of 4",
+                options: [
+                    { text: "Yes ✓", next: "computerTime_4" },
+                    { text: "Not yet", next: "computerTime_chores_no" }
+                ]
+            },
+            computerTime_chores_no: {
+                result: "🧹 CHORES FIRST! Your room and responsibilities come before fun time. Do your chores, then you can computer! 💪",
+                type: "warning"
+            },
+            computerTime_4: {
+                question: "Are you grounded?",
+                step: "Step 4 of 4",
+                options: [
+                    { text: "No", next: "computerTime_yes" },
+                    { text: "Yes", next: "computerTime_grounded" }
+                ]
+            },
+            computerTime_grounded: {
+                result: "❌ You're grounded, so NO computer time right now. Use this time to think about better choices! 🤔",
+                type: "warning"
+            },
+            computerTime_yes: {
+                result: "✅ YES! You can go on the computer! You've checked all the boxes and you're a responsible person for doing that! 🎮 Enjoy! 🌟",
+                type: "success"
+            },
+
+            foodSnacks_1: {
+                question: "Do you want a snack right now?",
+                step: "Step 1 of 2",
+                options: [
+                    { text: "Yes", next: "foodSnacks_2" },
+                    { text: "No, I can wait", next: "foodSnacks_wait" }
+                ]
+            },
+            foodSnacks_wait: {
+                result: "👍 Great! You can wait until dinner/snack time. That shows great self-control! 🌟",
+                type: "success"
+            },
+            foodSnacks_2: {
+                question: "What kind of snack are you thinking?",
+                step: "Step 2 of 2",
+                options: [
+                    { text: "Healthy (fruit, yogurt, etc)", next: "foodSnacks_healthy" },
+                    { text: "Treat (chips, candy, etc)", next: "foodSnacks_treat" }
+                ]
+            },
+            foodSnacks_healthy: {
+                result: "✅ AWESOME CHOICE! Healthy snacks keep your brain and body strong! Go get a yummy healthy snack! 🍎🥕",
+                type: "success"
+            },
+            foodSnacks_treat: {
+                result: "🤔 Treats are okay sometimes, but ask yourself: Did I already have a treat today? If yes, maybe pick something healthy instead. If no, one treat is fine! 🍪",
+                type: "warning"
+            },
+
+            goingOut_1: {
+                question: "Did Mom/Dad already say we're going somewhere today?",
+                step: "Step 1 of 2",
+                options: [
+                    { text: "Yes, we planned this", next: "goingOut_planned" },
+                    { text: "No, or I'm not sure", next: "goingOut_unsure" }
+                ]
+            },
+            goingOut_planned: {
+                question: "Is it time to go yet, or is it still later?",
+                step: "Step 2 of 2",
+                options: [
+                    { text: "It's time to go NOW", next: "goingOut_time" },
+                    { text: "It's still later", next: "goingOut_later" }
+                ]
+            },
+            goingOut_later: {
+                result: "⏳ It's not time yet! I know you're excited, but interrupting Mom for something that's happening later can wait. You can come back and ask in 30 minutes if you really need to! 🙂",
+                type: "warning"
+            },
+            goingOut_time: {
+                result: "✅ YES! It's time! Get ready and let Mom know you're excited to go! 🎉",
+                type: "success"
+            },
+            goingOut_unsure: {
+                result: "🤔 You can ask Mom about it, but think first: Is it something we talked about before? Do you remember when it's happening? Try to remember before asking! 💭",
+                type: "warning"
+            },
+
+            contactMom_1: {
+                question: "Is this an EMERGENCY or a question?",
+                step: "Step 1 of 3",
+                options: [
+                    { text: "EMERGENCY! Someone is hurt/in danger", next: "contactMom_emergency" },
+                    { text: "Regular question", next: "contactMom_2" }
+                ]
+            },
+            contactMom_emergency: {
+                result: "🚨 CALL MOM RIGHT NOW! This can't wait! Emergencies are what phones are for! 📞",
+                type: "warning"
+            },
+            contactMom_2: {
+                question: "Is Mom home or out driving?",
+                step: "Step 2 of 3",
+                options: [
+                    { text: "Home", next: "contactMom_home" },
+                    { text: "Out/Driving", next: "contactMom_driving" }
+                ]
+            },
+            contactMom_home: {
+                question: "Can you solve this yourself first?",
+                step: "Step 3 of 3",
+                options: [
+                    { text: "Yes, I can try", next: "contactMom_try_self" },
+                    { text: "No, I really need help", next: "contactMom_ask" }
+                ]
+            },
+            contactMom_try_self: {
+                result: "💪 TRY FIRST! Give it a shot before asking. You might surprise yourself with what you can do! Come back if you REALLY can't figure it out. 🌟",
+                type: "success"
+            },
+            contactMom_ask: {
+                result: "✅ You can ask Mom for help! She's home and available. Good thinking! 👍",
+                type: "success"
+            },
+            contactMom_driving: {
+                result: "📱 TEXT MOM (don't call while she's driving - that's unsafe!). Keep it short and she'll reply when safe. If it's truly urgent, call! ☑️",
+                type: "warning"
+            },
+
+            cleaningMesses_1: {
+                question: "What kind of mess did you make?",
+                step: "Step 1 of 2",
+                options: [
+                    { text: "Spill (food, drink, etc)", next: "cleaningMesses_spill" },
+                    { text: "Mess in my room", next: "cleaningMesses_room" }
+                ]
+            },
+            cleaningMesses_spill: {
+                question: "Can you clean it yourself?",
+                step: "Step 2 of 2",
+                options: [
+                    { text: "Yes, it's just a small spill", next: "cleaningMesses_do_it" },
+                    { text: "No, it's big/broken/messy", next: "cleaningMesses_help" }
+                ]
+            },
+            cleaningMesses_room: {
+                result: "🧹 You know what to do! Pick up your stuff, use a trash bag, tidy it up. You've done this before! Go for it! 💪",
+                type: "success"
+            },
+            cleaningMesses_do_it: {
+                result: "✅ GO FOR IT! Get a towel/paper towels and clean it up yourself. You know how! No need to ask Mom first! 🌟",
+                type: "success"
+            },
+            cleaningMesses_help: {
+                result: "👍 You can ask Mom to help with big messes. That's smart! Use your words: 'Mom, I need help with a spill.' 💬",
+                type: "success"
+            },
+
+            textingRules_1: {
+                question: "What are you texting Mom about?",
+                step: "Step 1 of 3",
+                options: [
+                    { text: "Emergency/Urgent", next: "textingRules_urgent" },
+                    { text: "Regular question", next: "textingRules_2" }
+                ]
+            },
+            textingRules_urgent: {
+                result: "🚨 CALL instead of text if it's urgent! Mom might not see a text right away. Calls get attention faster! 📞",
+                type: "warning"
+            },
+            textingRules_2: {
+                question: "Is Mom driving?",
+                step: "Step 2 of 3",
+                options: [
+                    { text: "Yes, she's driving", next: "textingRules_driving" },
+                    { text: "No, or I don't know", next: "textingRules_3" }
+                ]
+            },
+            textingRules_driving: {
+                result: "🚗 DON'T TEXT! Mom is driving and can't reply safely. Keep it short and non-urgent. She'll reply when she's safe! ☑️",
+                type: "warning"
+            },
+            textingRules_3: {
+                question: "Have you already texted her about this? Or did you text multiple times?",
+                step: "Step 3 of 3",
+                options: [
+                    { text: "First time asking", next: "textingRules_ok" },
+                    { text: "Already texted 2+ times", next: "textingRules_wait" }
+                ]
+            },
+            textingRules_ok: {
+                result: "✅ You can send ONE text! Make it clear and short. Then WAIT for a reply. Don't send 10 texts! 📱",
+                type: "success"
+            },
+            textingRules_wait: {
+                result: "⏸️ WAIT! You've already texted multiple times. Give Mom a chance to reply! Spamming texts makes her not want to answer. Patience! ⏳",
+                type: "warning"
+            }
         };
 
-        function showNextQuestion() {
-            let scenario = Object.keys(questions)[currentStep % Object.keys(questions).length];
-            let question = questions[scenario][(currentStep / Object.keys(questions).length) % questions[scenario].length];
-            document.getElementById('question').innerText = question;
-            // You can add options for YES/NO or other choices here
-            currentStep++;
-            document.getElementById('stepCounter').innerText = 'Step: ' + (currentStep + 1);
+        function showScreen(screenKey) {
+            const screen = decisionTrees[screenKey];
+            if (!screen) {
+                showScreen('home');
+                return;
+            }
+
+            let html = '';
+            
+            if (screen.step) {
+                html += `<div class="step-counter">${screen.step}</div>`;
+            }
+
+            if (screen.result) {
+                const resultClass = screen.type === 'warning' ? 'warning' : '';
+                html += `<div class="result ${resultClass}"><div class="stars">✨</div><p>${screen.result}</p></div>`;
+                html += `<button class="back-button" onclick="showScreen('home')">← Back to Main Menu</button>`;
+            } else {
+                html += `<div class="question">${screen.question}</div>`;
+                html += '<div class="options">';
+                screen.options.forEach(option => {
+                    html += `<button onclick="showScreen('${option.next}')">${option.text}</button>`;
+                });
+                html += '</div>';
+                
+                if (screenKey !== 'home') {
+                    html += `<button class="back-button" onclick="showScreen('home')">← Back to Main Menu</button>`;
+                }
+            }
+
+            document.getElementById('content').innerHTML = html;
         }
 
-        showNextQuestion();
+        // Start at home
+        showScreen('home');
     </script>
 </body>
 </html>
