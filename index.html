@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DecisionBug - Galaxy-Themed Decision Tree</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #4a0f78, #1e1f78);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+        }
+        .scenario-button {
+            margin: 10px;
+            padding: 15px 25px;
+            background-color: #3e1b85;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .scenario-button:hover {
+            background-color: #5e4ecb;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to DecisionBug!</h1>
+    <div>
+        <h2>What do you think you should do?</h2>
+        <button class="scenario-button" onclick="showStep('computerTime')">Computer Time</button>
+        <button class="scenario-button" onclick="showStep('foodSnacks')">Food/Snacks</button>
+        <button class="scenario-button" onclick="showStep('goingOut')">Going Out/Swimming</button>
+        <button class="scenario-button" onclick="showStep('contactMom')">Contacting Mom</button>
+        <button class="scenario-button" onclick="showStep('cleaningMesses')">Cleaning Messes</button>
+        <button class="scenario-button" onclick="showStep('textingRules')">Texting Rules</button>
+        <button class="scenario-button" onclick="showStep('customScenario')">Custom Scenarios</button>
+    </div>
+    <div id="guidance" class="message"></div>
+    <script>
+        function showStep(scenario) {
+            let messages = {
+                computerTime: "Great choice! Start by checking your meds and doing your chores. Ready for the next step?",
+                foodSnacks: "Awesome! Let’s choose a healthy snack first. What do you want to eat?",
+                goingOut: "Super fun! Make sure you have your swimsuit and sunscreen. Are you ready to go?",
+                contactMom: "Is it an emergency or can it wait? Let's think carefully about this!",
+                cleaningMesses: "Let’s clean up! It’s easy; just start with one small area at a time and ask for help if you need it.",
+                textingRules: "Let’s be safe! Remember to think before you text. What would be the best message to send?",
+                customScenario: "What do you want to do? Let’s create your own decision scenario together!",
+            };
+            document.getElementById('guidance').innerText = messages[scenario];
+        }
+    </script>
+</body>
+</html>
